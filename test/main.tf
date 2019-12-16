@@ -1,16 +1,17 @@
 locals {
   # test values hardcoded here
-  environment = "tflibtest"
-  stack_name  = "lib-ecs-test"
+  stack_name  = "ecs-lib"
+  environment = "test"
   name_prefix = "${local.stack_name}-${local.environment}"
 
-  aws_region        = "eu-west-2"
-  ecs_key_pair_name = "stack-pocs"
-  instance_type     = "t3.micro"
-  image_id          = "ami-0f49b2a9014635082" # ECS optimized Amazon Linux in London created 10/07/2019
-  max_instance_size = 1
-  min_instance_size = 1
-  desired_capacity  = 1
+  aws_region                 = "eu-west-2"
+  asg_max_instance_count     = 1
+  asg_min_instance_count     = 1
+  asg_desired_instance_count = 1
+  ec2_instance_type          = "t3.micro"
+  ec2_key_pair_name          = ""                      #"stack-pocs"
+  ec2_image_id               = "ami-0f49b2a9014635082" # ECS optimized Amazon Linux in London created 10/07/2019
+  ec2_ingress_cidr_blocks    = "0.0.0.0/0"
 }
 
 provider "aws" {
@@ -34,16 +35,23 @@ data "aws_subnet_ids" "all" {
 module "ecs-cluster" {
   source = "../" # up to root of repo
 
+  # Standard Variables
   stack_name  = local.stack_name
   name_prefix = local.name_prefix
   environment = local.environment
 
-  vpc_id            = "${data.aws_vpc.default.id}"
-  ecs_key_pair_name = local.ecs_key_pair_name
-  instance_type     = local.instance_type
-  image_id          = local.image_id
-  max_instance_size = local.max_instance_size
-  min_instance_size = local.min_instance_size
-  desired_capacity  = local.desired_capacity
-  application_ids   = "${join(",", data.aws_subnet_ids.all.ids)}"
+  # Network Variables
+  vpc_id                 = "${data.aws_vpc.default.id}"
+  application_subnet_ids = "${join(",", data.aws_subnet_ids.all.ids)}"
+
+  # Auto Scaling Group Variables
+  asg_max_instance_count     = local.asg_max_instance_count
+  asg_min_instance_count     = local.asg_min_instance_count
+  asg_desired_instance_count = local.asg_desired_instance_count
+
+  # EC2 Launch Configuration Variables
+  ec2_key_pair_name       = local.ec2_key_pair_name
+  ec2_instance_type       = local.ec2_instance_type
+  ec2_image_id            = local.ec2_image_id
+  ec2_ingress_cidr_blocks = local.ec2_ingress_cidr_blocks
 }

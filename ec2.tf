@@ -9,7 +9,7 @@ resource "aws_security_group" "ec2-security-group" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = split(",", var.ec2_ingress_cidr_blocks)
   }
 
   // HTTPS
@@ -17,7 +17,7 @@ resource "aws_security_group" "ec2-security-group" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = split(",", var.ec2_ingress_cidr_blocks)
   }
 
   // SSH
@@ -25,7 +25,7 @@ resource "aws_security_group" "ec2-security-group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = split(",", var.ec2_ingress_cidr_blocks)
   }
 
   // Application well known container ports
@@ -33,7 +33,7 @@ resource "aws_security_group" "ec2-security-group" {
     from_port   = 9000
     to_port     = 11000
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = split(",", var.ec2_ingress_cidr_blocks)
   }
 
   // ECS Auto-Assigned Host Ports in the linux kernel epehemeral port range
@@ -41,7 +41,7 @@ resource "aws_security_group" "ec2-security-group" {
     from_port   = 32768
     to_port     = 61000
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = split(",", var.ec2_ingress_cidr_blocks)
   }
 
   egress {
@@ -54,30 +54,38 @@ resource "aws_security_group" "ec2-security-group" {
 
 // ---- Launch Configuration ----
 resource "aws_launch_configuration" "ecs-launch-configuration" {
-  name                        = "${var.name_prefix}-ecs-lc"
-  image_id                    = "${var.image_id}"
-  instance_type               = "${var.instance_type}"
+  name_prefix                 = "${var.name_prefix}-"
+  image_id                    = "${var.ec2_image_id}"
+  instance_type               = "${var.ec2_instance_type}"
   iam_instance_profile        = aws_iam_instance_profile.ecs-instance-profile.name
   security_groups             = ["${aws_security_group.ec2-security-group.id}"]
   associate_public_ip_address = false
-  key_name                    = "${var.ecs_key_pair_name}"
+  key_name                    = "${var.ec2_key_pair_name}"
   user_data = templatefile(
     "${path.module}/ec2-user-data.tmpl",
     {
       ecs_cluster_name : aws_ecs_cluster.ecs-cluster.name
     }
   )
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 //---- Auto Scaling Group ----
 resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   name                 = "${var.name_prefix}-ecs-asg"
-  max_size             = "${var.max_instance_size}"
-  min_size             = "${var.min_instance_size}"
-  desired_capacity     = "${var.desired_capacity}"
-  vpc_zone_identifier  = flatten([split(",", var.application_ids)])
+  max_size             = "${var.asg_max_instance_count}"
+  min_size             = "${var.asg_min_instance_count}"
+  desired_capacity     = "${var.asg_desired_instance_count}"
+  vpc_zone_identifier  = split(",", var.application_subnet_ids)
   launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type    = "ELB"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tags = [
     {
