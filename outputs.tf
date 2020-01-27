@@ -7,6 +7,10 @@ output "ecs_cluster_name" {
   value = "${aws_ecs_cluster.ecs-cluster.name}"
 }
 
+output "ecs_cluster_sg_id" {
+  value = "${aws_security_group.ec2-security-group.id}"
+}
+
 // IAM module outputs
 
 output "ecs_instance_profile_name" {
