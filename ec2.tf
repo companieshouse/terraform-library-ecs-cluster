@@ -107,7 +107,7 @@ resource "aws_ecs_capacity_provider" "test" {
   name = "example"
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn         = aws_autoscaling_group.ecs-auto-scaling-group.arn
+    auto_scaling_group_arn         = aws_autoscaling_group.ecs-autoscaling-group.arn
     managed_termination_protection = "ENABLED"
 
     managed_scaling {
