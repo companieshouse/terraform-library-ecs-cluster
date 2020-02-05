@@ -68,10 +68,6 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
       ecs_cluster_name : aws_ecs_cluster.ecs-cluster.name
     }
   )
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 //---- Auto Scaling Group ----
@@ -84,10 +80,6 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type    = "ELB"
   protect_from_scale_in = "true"
-
-  lifecycle {
-    create_before_destroy = true
-  }
 
   tags = [
     {
