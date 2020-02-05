@@ -83,6 +83,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   vpc_zone_identifier  = split(",", var.application_subnet_ids)
   launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type    = "ELB"
+  protect_from_scale_in = "true"
 
   lifecycle {
     create_before_destroy = true
