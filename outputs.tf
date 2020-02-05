@@ -11,6 +11,10 @@ output "ecs_cluster_sg_id" {
   value = "${aws_security_group.ec2-security-group.id}"
 }
 
+output "ecs_cluster_autoscalinggroup_arn" {
+  value = "${aws_autoscaling_group.ecs-autoscaling-group.arn}"
+}
+
 // IAM module outputs
 
 output "ecs_instance_profile_name" {
