@@ -68,6 +68,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
       ecs_cluster_name : aws_ecs_cluster.ecs-cluster.name
     }
   )
+
 }
 
 //---- Auto Scaling Group ----
@@ -80,6 +81,10 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type    = "ELB"
   protect_from_scale_in = "true"
+
+  depends_on = [
+    aws_launch_configuration.ecs-launch-configuration.arn
+  ]
 
   tags = [
     {
@@ -109,4 +114,7 @@ resource "aws_ecs_capacity_provider" "test" {
       target_capacity           = 100
     }
   }
+  depends_on = [
+    aws_autoscaling_group.ecs-autoscaling-group.arn
+  ]
 }

@@ -4,4 +4,7 @@ resource "aws_ecs_cluster" "ecs-cluster" {
     capacity_provider = aws_ecs_capacity_provider.test.arn
     weight = 1
   }
+  depends_on = [
+    aws_ecs_capacity_provider.test.arn
+  ]
 }
