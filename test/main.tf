@@ -41,8 +41,8 @@ module "ecs-cluster" {
   environment = local.environment
 
   # Network Variables
-  vpc_id                 = "${data.aws_vpc.default.id}"
-  application_subnet_ids = "${join(",", data.aws_subnet_ids.all.ids)}"
+  vpc_id     = "${data.aws_vpc.default.id}"
+  subnet_ids = "${join(",", data.aws_subnet_ids.all.ids)}"
 
   # Auto Scaling Group Variables
   asg_max_instance_count     = local.asg_max_instance_count

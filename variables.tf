@@ -21,8 +21,8 @@ variable "vpc_id" {
   description = "ID of the VPC to deploy resources into."
   type        = "string"
 }
-variable "application_subnet_ids" {
-  description = "Comma seperated list of subnet ids to deploy the cluster into. Effectively the subnets to run applications in."
+variable "subnet_ids" {
+  description = "Comma seperated list of subnet ids to deploy the cluster into."
   type        = "string"
 }
 

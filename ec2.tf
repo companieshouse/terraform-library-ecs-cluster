@@ -80,7 +80,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   max_size             = "${var.asg_max_instance_count}"
   min_size             = "${var.asg_min_instance_count}"
   desired_capacity     = "${var.asg_desired_instance_count}"
-  vpc_zone_identifier  = split(",", var.application_subnet_ids)
+  vpc_zone_identifier  = split(",", var.subnet_ids)
   launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type    = "ELB"
 
