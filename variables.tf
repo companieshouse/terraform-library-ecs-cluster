@@ -72,6 +72,6 @@ variable "ec2_ingress_cidr_blocks" {
 }
 variable "ec2_ingress_sg_id" {
   description = "The security groups from which to allow access to port 80."
-  type        = "string"
-  default     = ""
+  type        = list(string)
+  default     = []
 }

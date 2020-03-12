@@ -10,7 +10,7 @@ resource "aws_security_group" "ec2-security-group" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = split(",", var.ec2_ingress_cidr_blocks)
-    security_groups = [var.ec2_ingress_sg_id]
+    security_groups = var.ec2_ingress_sg_id
   }
 
   // HTTPS
