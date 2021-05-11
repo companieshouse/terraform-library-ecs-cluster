@@ -80,7 +80,7 @@ variable "ec2_ingress_sg_id" {
 // Networking Variables
 //----------------------------------------------------------------------
 variable "container_insights_enablement" {
-  description = "Whether contain sights are set  Value values are [enabled',disabled]"
+  description = "Whether container sights are set, valid values are [enabled,disabled]"
   type        = "string"
   default     = "disabled"
 }
