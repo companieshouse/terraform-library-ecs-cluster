@@ -75,3 +75,12 @@ variable "ec2_ingress_sg_id" {
   type        = list(string)
   default     = []
 }
+
+//----------------------------------------------------------------------
+// ECS Cluster Variables
+//----------------------------------------------------------------------
+variable "container_insights_enablement" {
+  description = "Whether container sights are set, valid values are [enabled,disabled]"
+  type        = "string"
+  default     = "disabled"
+}
