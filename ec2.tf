@@ -2,7 +2,7 @@
 resource "aws_security_group" "ec2-security-group" {
   name        = "${var.name_prefix}-ec2-sg"
   description = "Allow HTTP, HTTPS, and SSH"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
   // HTTP
   ingress {
@@ -56,12 +56,12 @@ resource "aws_security_group" "ec2-security-group" {
 // ---- Launch Configuration ----
 resource "aws_launch_configuration" "ecs-launch-configuration" {
   name_prefix                 = "${var.name_prefix}-"
-  image_id                    = "${var.ec2_image_id}"
-  instance_type               = "${var.ec2_instance_type}"
+  image_id                    = var.ec2_image_id
+  instance_type               = var.ec2_instance_type
   iam_instance_profile        = aws_iam_instance_profile.ecs-instance-profile.name
-  security_groups             = ["${aws_security_group.ec2-security-group.id}"]
+  security_groups             = [aws_security_group.ec2-security-group.id]
   associate_public_ip_address = false
-  key_name                    = "${var.ec2_key_pair_name}"
+  key_name                    = var.ec2_key_pair_name
   user_data = templatefile(
     "${path.module}/ec2-user-data.tmpl",
     {
@@ -77,11 +77,11 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
 //---- Auto Scaling Group ----
 resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   name                 = "${var.name_prefix}-ecs-asg"
-  max_size             = "${var.asg_max_instance_count}"
-  min_size             = "${var.asg_min_instance_count}"
-  desired_capacity     = "${var.asg_desired_instance_count}"
+  max_size             = var.asg_max_instance_count
+  min_size             = var.asg_min_instance_count
+  desired_capacity     = var.asg_desired_instance_count
   vpc_zone_identifier  = split(",", var.subnet_ids)
-  launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
+  launch_configuration = aws_launch_configuration.ecs-launch-configuration.name
   health_check_type    = "ELB"
 
   lifecycle {
@@ -96,7 +96,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
     },
     {
       key                 = "Environment"
-      value               = "${var.environment}"
+      value               = var.environment
       propagate_at_launch = true
     }
   ]

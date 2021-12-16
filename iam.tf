@@ -2,14 +2,14 @@
 resource "aws_iam_instance_profile" "ecs-instance-profile" {
   name = "${var.name_prefix}-ecs-instance-profile"
   path = "/"
-  role = "${aws_iam_role.ecs-instance-role.name}"
+  role = aws_iam_role.ecs-instance-role.name
 }
 
 // ---- ECS Instance Role ----
 resource "aws_iam_role" "ecs-instance-role" {
   name               = "${var.name_prefix}-ecs-instance-role"
   path               = "/"
-  assume_role_policy = "${data.aws_iam_policy_document.ecs-instance-policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.ecs-instance-policy.json
 }
 
 data "aws_iam_policy_document" "ecs-instance-policy" {
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "ecs-instance-policy" {
 
 resource "aws_iam_role_policy" "cloudwatch-logs-policy" {
   name = "cloudwatch-logs-policy"
-  role = "${aws_iam_role.ecs-instance-role.id}"
+  role = aws_iam_role.ecs-instance-role.id
 
   policy = <<EOF
 {
@@ -43,7 +43,7 @@ EOF
 
 resource "aws_iam_role_policy" "iam-pass-role-policy" {
   name = "iam-pass-role-policy"
-  role = "${aws_iam_role.ecs-instance-role.id}"
+  role = aws_iam_role.ecs-instance-role.id
 
   policy = <<EOF
 {
@@ -63,7 +63,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-instance-role-attachment" {
-  role       = "${aws_iam_role.ecs-instance-role.name}"
+  role       = aws_iam_role.ecs-instance-role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
@@ -72,11 +72,11 @@ resource "aws_iam_role_policy_attachment" "ecs-instance-role-attachment" {
 resource "aws_iam_role" "ecs-service-role" {
   name               = "${var.name_prefix}-ecs-service-role"
   path               = "/"
-  assume_role_policy = "${data.aws_iam_policy_document.ecs-service-policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.ecs-service-policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-service-role-attachment" {
-  role       = "${aws_iam_role.ecs-service-role.name}"
+  role       = aws_iam_role.ecs-service-role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 }
 
@@ -96,7 +96,7 @@ data "aws_iam_policy_document" "ecs-service-policy" {
 
 resource "aws_iam_role_policy" "ecs-secrets-policy" {
   name = "ecs-secrets-policy"
-  role = "${aws_iam_role.ecs-service-role.id}"
+  role = aws_iam_role.ecs-service-role.id
 
   policy = <<EOF
 {
@@ -125,11 +125,11 @@ EOF
 resource "aws_iam_role" "ecs-task-execution-role" {
   name               = "${var.name_prefix}-ecs-task-execution-role"
   path               = "/"
-  assume_role_policy = "${data.aws_iam_policy_document.ecs-task-execution-policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.ecs-task-execution-policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-attachment" {
-  role       = "${aws_iam_role.ecs-task-execution-role.name}"
+  role       = aws_iam_role.ecs-task-execution-role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 }
 
@@ -149,7 +149,7 @@ data "aws_iam_policy_document" "ecs-task-execution-policy" {
 
 resource "aws_iam_role_policy" "ecs-task-execution-policy" {
   name = "ecs-task-execution-policy"
-  role = "${aws_iam_role.ecs-task-execution-role.id}"
+  role = aws_iam_role.ecs-task-execution-role.id
 
   policy = <<EOF
 {
