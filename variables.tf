@@ -3,15 +3,15 @@
 //----------------------------------------------------------------------
 variable "stack_name" {
   description = "The name of the infrastructure 'stack' this cluster is part of."
-  type        = "string"
+  type        = string
 }
 variable "environment" {
   description = "The name of the environment this cluster is part of e.g. live, staging, dev. etc."
-  type        = "string"
+  type        = string
 }
 variable "name_prefix" {
   description = "The prefix to use when naming resources in this cluster. Usually a combination of environment and stack_name for concistency e.g. '{stack_name}-{environment}'."
-  type        = "string"
+  type        = string
 }
 
 //----------------------------------------------------------------------
@@ -19,11 +19,11 @@ variable "name_prefix" {
 //----------------------------------------------------------------------
 variable "vpc_id" {
   description = "ID of the VPC to deploy resources into."
-  type        = "string"
+  type        = string
 }
 variable "subnet_ids" {
   description = "Comma seperated list of subnet ids to deploy the cluster into."
-  type        = "string"
+  type        = string
 }
 
 //----------------------------------------------------------------------
@@ -52,22 +52,22 @@ variable "asg_desired_instance_count" {
 //----------------------------------------------------------------------
 variable "ec2_key_pair_name" {
   description = "The ec2 key pair name for SSH access to ec2 instances in the clusters auto scaling group."
-  type        = "string"
+  type        = string
   default     = "" # Empty string implies no key pair should be used so no SSH access is available on the instances
 }
 variable "ec2_image_id" {
   description = "The name for the autoscaling group for the cluster."
-  type        = "string"
+  type        = string
   default     = "ami-0f49b2a9014635082" # ECS optimized Amazon Linux in London created 10/07/2019
 }
 variable "ec2_instance_type" {
   description = "The ec2 instance type for ec2 instances in the clusters auto scaling group."
-  type        = "string"
+  type        = string
   default     = "t3.micro"
 }
 variable "ec2_ingress_cidr_blocks" {
   description = "Comma seperated list of ingress CIDR ranges to allow access to application ports."
-  type        = "string"
+  type        = string
   default     = "0.0.0.0/0"
 }
 variable "ec2_ingress_sg_id" {
@@ -81,6 +81,6 @@ variable "ec2_ingress_sg_id" {
 //----------------------------------------------------------------------
 variable "container_insights_enablement" {
   description = "Whether container sights are set, valid values are [enabled,disabled]"
-  type        = "string"
+  type        = string
   default     = "disabled"
 }
