@@ -58,7 +58,7 @@ variable "ec2_key_pair_name" {
 variable "ec2_image_id" {
   description = "The name for the autoscaling group for the cluster."
   type        = string
-  default     = "ami-0f49b2a9014635082" # ECS optimized Amazon Linux in London created 10/07/2019
+  default     = "ami-04018f95156d810bc" # ECS optimized Amazon2 Linux in London created 15/03/2023
 }
 variable "ec2_instance_type" {
   description = "The ec2 instance type for ec2 instances in the clusters auto scaling group."
