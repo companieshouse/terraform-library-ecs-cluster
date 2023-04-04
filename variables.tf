@@ -81,5 +81,6 @@ variable "ec2_ingress_sg_id" {
 //----------------------------------------------------------------------
 variable "container_insights_enablement" {
   description = "Whether container sights are set, valid values are [enabled,disabled]"
-  container_insights_enablement     = 1
+   type        = string
+   default     = "enabled"
 }
