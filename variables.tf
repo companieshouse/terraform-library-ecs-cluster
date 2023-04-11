@@ -79,8 +79,8 @@ variable "ec2_ingress_sg_id" {
 //----------------------------------------------------------------------
 // ECS Cluster Variables
 //----------------------------------------------------------------------
-variable "container_insights_enablement" {
-  description = "Whether container sights are set, valid values are [enabled,disabled]"
-  type        = string
-  default     = "disabled"
+variable "enable_container_insights" {
+  description = "A boolean value indicating whether to enable Container Insights or not"
+  type        = bool
+  default     = false
 }
