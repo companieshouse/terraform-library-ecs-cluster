@@ -111,6 +111,7 @@ resource "aws_autoscaling_schedule" "schedule-scaledown" {
   max_size               = 0
   desired_capacity       = 0
   recurrence             = var.scaledown_schedule
+  time_zone              = "Europe/London"
   autoscaling_group_name = aws_autoscaling_group.ecs-autoscaling-group.name
 }
 
@@ -123,5 +124,6 @@ resource "aws_autoscaling_schedule" "schedule-scaleup" {
   max_size               = var.asg_max_instance_count
   desired_capacity       = var.asg_desired_instance_count
   recurrence             = var.scaleup_schedule
+  time_zone              = "Europe/London"
   autoscaling_group_name = aws_autoscaling_group.ecs-autoscaling-group.name
 }
