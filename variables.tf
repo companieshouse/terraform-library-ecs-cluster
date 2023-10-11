@@ -47,6 +47,24 @@ variable "asg_desired_instance_count" {
   default     = 2
 }
 
+variable "scaledown_schedule" {
+  description = "The schedule to use when scaling down the number of EC2 instances to zero."
+  # Typically used to stop all instances in a cluster to save resource costs overnight.
+  # E.g. a value of '00 20 * * 1-7' would be Mon-Sun 8pm.  An empty string indicates that no schedule should be created.
+
+  type        = string
+  default     = ""
+}
+
+variable "scaleup_schedule" {
+  description = "The schedule to use when scaling up the number of EC2 instances to their normal desired level."
+  # Typically used to start all instances in a cluster after it has been shutdown overnight.
+  # E.g. a value of '00 06 * * 1-7' would be Mon-Sun 6am.  An empty string indicates that no schedule should be created.
+
+  type        = string
+  default     = ""
+}
+
 //----------------------------------------------------------------------
 // EC2 Launch Configuration Variables
 //----------------------------------------------------------------------

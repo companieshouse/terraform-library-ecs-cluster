@@ -101,3 +101,27 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
     }
   ]
 }
+
+# ASG scheduled shutdown
+resource "aws_autoscaling_schedule" "schedule-scaledown" {
+  count = length(var.scaledown_schedule) > 0 ? 1 : 0
+
+  scheduled_action_name  = "${var.name_prefix}-scheduled-scaledown"
+  min_size               = 0
+  max_size               = 0
+  desired_capacity       = 0
+  recurrence             = var.scaledown_schedule
+  autoscaling_group_name = aws_autoscaling_group.ecs-autoscaling-group.name
+}
+
+# ASG scheduled startup
+resource "aws_autoscaling_schedule" "schedule-scaleup" {
+  count = length(var.scaleup_schedule) > 0 ? 1 : 0
+  
+  scheduled_action_name  = "${var.name_prefix}-scheduled-scaleup"
+  min_size               = var.asg_min_instance_count
+  max_size               = var.asg_max_instance_count
+  desired_capacity       = var.asg_desired_instance_count
+  recurrence             = var.scaleup_schedule
+  autoscaling_group_name = aws_autoscaling_group.ecs-autoscaling-group.name
+}
