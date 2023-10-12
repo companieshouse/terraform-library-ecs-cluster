@@ -8,6 +8,8 @@ locals {
   asg_max_instance_count     = 1
   asg_min_instance_count     = 1
   asg_desired_instance_count = 1
+  scaledown_schedule         = "00 20 * * 1-7"
+  scaleup_schedule           = "00 06 * * 1-7"
   ec2_instance_type          = "t3.micro"
   ec2_key_pair_name          = ""                      #"stack-pocs"
   ec2_image_id               = "ami-0f49b2a9014635082" # ECS optimized Amazon Linux in London created 10/07/2019
@@ -24,7 +26,7 @@ terraform {
   }
 }
 
-# Get default VPC and subnets to keep test simple rather than using netowkrs remote state
+# Get default VPC and subnets to keep test simple rather than using networks remote state
 data "aws_vpc" "default" {
   default = true
 }
@@ -48,6 +50,8 @@ module "ecs-cluster" {
   asg_max_instance_count     = local.asg_max_instance_count
   asg_min_instance_count     = local.asg_min_instance_count
   asg_desired_instance_count = local.asg_desired_instance_count
+  scaledown_schedule         = local.scaledown_schedule
+  scaleup_schedule           = local.scaleup_schedule
 
   # EC2 Launch Configuration Variables
   ec2_key_pair_name       = local.ec2_key_pair_name
