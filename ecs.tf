@@ -26,7 +26,7 @@ resource "aws_ecs_capacity_provider" "ec2_capacity_provider" {
 resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_providers" {
   count              = var.enable_asg_autoscaling ? 1 : 0
   cluster_name       = aws_ecs_cluster.ecs-cluster.name
-  capacity_providers = [aws_ecs_capacity_provider.ec2_capacity_provider[0].name, "FARGATE"]
+  capacity_providers = [aws_ecs_capacity_provider.ec2_capacity_provider[0].name]
 
   # default to using EC2 if no capacity provider strategy is defined for a service
   default_capacity_provider_strategy {
