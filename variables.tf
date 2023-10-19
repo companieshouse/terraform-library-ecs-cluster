@@ -65,6 +65,12 @@ variable "scaleup_schedule" {
   default     = ""
 }
 
+variable "enable_asg_autoscaling" {
+  type        = bool
+  description = "Whether to enable auto-scaling of the ASG by creating a capacity provider for the ECS cluster."
+  default     = false
+}
+
 //----------------------------------------------------------------------
 // EC2 Launch Configuration Variables
 //----------------------------------------------------------------------

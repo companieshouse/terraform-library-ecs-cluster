@@ -76,30 +76,37 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
 
 //---- Auto Scaling Group ----
 resource "aws_autoscaling_group" "ecs-autoscaling-group" {
-  name                 = "${var.name_prefix}-ecs-asg"
-  max_size             = var.asg_max_instance_count
-  min_size             = var.asg_min_instance_count
-  desired_capacity     = var.asg_desired_instance_count
-  vpc_zone_identifier  = split(",", var.subnet_ids)
-  launch_configuration = aws_launch_configuration.ecs-launch-configuration.name
-  health_check_type    = "ELB"
+  name                  = "${var.name_prefix}-ecs-asg"
+  max_size              = var.asg_max_instance_count
+  min_size              = var.asg_min_instance_count
+  desired_capacity      = var.asg_desired_instance_count
+  vpc_zone_identifier   = split(",", var.subnet_ids)
+  launch_configuration  = aws_launch_configuration.ecs-launch-configuration.name
+  health_check_type     = "ELB"
+  protect_from_scale_in = var.enable_asg_autoscaling
 
   lifecycle {
     create_before_destroy = true
   }
 
-  tags = [
-    {
-      key                 = "Name"
-      value               = "${var.name_prefix}-ecs-instance"
-      propagate_at_launch = true
-    },
-    {
-      key                 = "Environment"
-      value               = var.environment
+  tag {
+    key                 = "Name"
+    value               = "${var.name_prefix}-ecs-instance"
+    propagate_at_launch = true
+  }
+  tag  {
+    key                 = "Environment"
+    value               = var.environment
+    propagate_at_launch = true
+  }
+  dynamic "tag" {
+    for_each = var.enable_asg_autoscaling ? [""] : []
+    content {
+      key                 = "AmazonECSManaged"
+      value               = true
       propagate_at_launch = true
     }
-  ]
+  }
 }
 
 # ASG scheduled shutdown
