@@ -1,6 +1,6 @@
 // --- s3 bucket for shared services config ---
 data "vault_generic_secret" "shared_s3" {
-  path = "aws-accounts/shared-services/s3
+  path = "aws-accounts/shared-services/s3"
 }
 
 locals {
