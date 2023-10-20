@@ -1,3 +1,12 @@
+// --- s3 bucket for shared services config ---
+data "vault_generic_secret" "shared_s3" {
+  path = "aws-accounts/shared-services/s3
+}
+
+locals {
+  s3_config_bucket = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
+}
+
 // ---- ECS Instance Profile ----
 resource "aws_iam_instance_profile" "ecs-instance-profile" {
   name = "${var.name_prefix}-ecs-instance-profile"
@@ -174,7 +183,25 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
       "Resource": [
         "*"
       ]
-    }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${local.s3_config_bucket}/*/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketLocation"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${local.s3_config_bucket}"
+      ]
+    }    
   ]
 }
 EOF
