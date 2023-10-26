@@ -15,10 +15,10 @@ resource "aws_ecs_capacity_provider" "ec2_capacity_provider" {
     managed_termination_protection = "ENABLED"
 
     managed_scaling {
-      maximum_scaling_step_size = 150
-      minimum_scaling_step_size = 1
+      maximum_scaling_step_size = var.maximum_scaling_step_size
+      minimum_scaling_step_size = var.minimum_scaling_step_size
       status                    = "ENABLED"
-      target_capacity           = 100
+      target_capacity           = var.target_capacity
     }
   }
 }
