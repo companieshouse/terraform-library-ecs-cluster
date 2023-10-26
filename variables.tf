@@ -65,6 +65,30 @@ variable "scaleup_schedule" {
   default     = ""
 }
 
+variable "enable_asg_autoscaling" {
+  description = "Whether to enable auto-scaling of the ASG by creating a capacity provider for the ECS cluster."
+  type        = bool
+  default     = false
+}
+
+variable "maximum_scaling_step_size" {
+  description = "The maximum number of Amazon EC2 instances that Amazon ECS will scale out at one time.  Total is limited by asg_max_instance_count too."
+  type        = number
+  default     = 150
+}
+
+variable "minimum_scaling_step_size" {
+  description = "The minimum number of Amazon EC2 instances that Amazon ECS will scale out at one time."
+  type        = number
+  default     = 1
+}
+
+variable "target_capacity" {
+  description = "The target capacity utilization as a percentage for the capacity provider."
+  type        = number
+  default     = 100
+}
+
 //----------------------------------------------------------------------
 // EC2 Launch Configuration Variables
 //----------------------------------------------------------------------
